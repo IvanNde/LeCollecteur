@@ -6,4 +6,5 @@ databases
 paramiko
 jinja2
 aiofiles
-python-multipart 
+python-multipart
+itsdangerous 

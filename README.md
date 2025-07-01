@@ -84,7 +84,7 @@ http://127.0.0.1:8000/docs
       "adresse_ip": "192.168.1.10",
       "utilisateur_ssh": "root",
       "port_ssh": 22,
-      "chemin_cle_privee": "C:\\Users\\INET\\.ssh\\id_rsa", // ou null
+      "chemin_cle_privee": "C:\\Users\\IvanNde\\.ssh\\id_rsa", // ou null
       "mot_de_passe": null // ou "votre_mot_de_passe"
     }
     ```
