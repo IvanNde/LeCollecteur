@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Historique des exécutions - Le Collecteur</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <span style="font-weight:700;font-size:1.2em;letter-spacing:1px;">Le Collecteur</span>
+        <nav style="display:inline-block;margin-left:40px;">
+            <a href="/dashboard_html">Tableau de bord</a>
+            <a href="/serveurs_html">Serveurs</a>
+            <a href="/taches_html">Tâches planifiées</a>
+            <a href="/logout">Déconnexion</a>
+        </nav>
+        <span id="theme-switch" style="float:right;margin-right:30px;"></span>
+    </header>
+    <div class="main-content">
+        <div style="width:90%;margin:auto;text-align:right;">
+            <a href="/dashboard_html">Tableau de bord</a>
+        </div>
+        <h1>Historique des exécutions pour {{ serveur.nom }}</h1>
+        <a href="/serveurs_html">Retour à la liste</a>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Script</th>
+                    <th>Sortie standard</th>
+                    <th>Sortie d'erreur</th>
+                    <th>Erreur</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for log in logs %}
+                <tr>
+                    <td>{{ log.date_execution.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td><pre>{{ log.script }}</pre></td>
+                    <td><pre>{{ log.stdout or '' }}</pre></td>
+                    <td><pre>{{ log.stderr or '' }}</pre></td>
+                    <td style="color:red;"><pre>{{ log.error or '' }}</pre></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="/static/theme.js"></script>
+</body>
+</html> 

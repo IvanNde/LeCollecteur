@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion - Le Collecteur</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <span style="font-weight:700;font-size:1.2em;letter-spacing:1px;">Le Collecteur</span>
+        <nav style="display:inline-block;margin-left:40px;">
+            <a href="/dashboard_html">Tableau de bord</a>
+            <a href="/serveurs_html">Serveurs</a>
+            <a href="/taches_html">Tâches planifiées</a>
+        </nav>
+        <span id="theme-switch" style="float:right;margin-right:30px;"></span>
+    </header>
+    <div class="main-content">
+    <h1>Connexion</h1>
+    <div class="form-card">
+    <form method="post" action="/login">
+        <div class="form-row"><label>Nom d'utilisateur :</label><input type="text" name="username" required></div>
+        <div class="form-row"><label>Mot de passe :</label><input type="password" name="password" required></div>
+        <div style="text-align:center;margin-top:18px;">
+            <button type="submit">Se connecter</button>
+        </div>
+    </form>
+    </div>
+    {% if error %}
+        <div style="color:red;">{{ error }}</div>
+    {% endif %}
+    </div>
+    <script src="/static/theme.js"></script>
+</body>
+</html> 

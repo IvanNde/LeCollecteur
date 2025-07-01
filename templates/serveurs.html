@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des serveurs - Le Collecteur</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <span style="font-weight:700;font-size:1.2em;letter-spacing:1px;">Le Collecteur</span>
+        <nav style="display:inline-block;margin-left:40px;">
+            <a href="/dashboard_html">Tableau de bord</a>
+            <a href="/serveurs_html">Serveurs</a>
+            <a href="/taches_html">Tâches planifiées</a>
+            <a href="/logout">Déconnexion</a>
+        </nav>
+        <span id="theme-switch" style="float:right;margin-right:30px;"></span>
+    </header>
+    <div class="main-content">
+        {% if notification %}
+            <div class="notif notif-{{ notification.type }}">{{ notification.message }}</div>
+        {% endif %}
+        <h1>Liste des serveurs</h1>
+        <h2>Ajouter un serveur</h2>
+        <div class="form-card">
+        <form method="post" action="/ajouter_serveur_html">
+            <div class="form-row"><label>Nom :</label><input type="text" name="nom" required></div>
+            <div class="form-row"><label>Adresse IP :</label><input type="text" name="adresse_ip" required></div>
+            <div class="form-row"><label>Utilisateur SSH :</label><input type="text" name="utilisateur_ssh" required></div>
+            <div class="form-row"><label>Port SSH :</label><input type="number" name="port_ssh" value="22" required></div>
+            <div class="form-row"><label>Chemin clé privée :</label><input type="text" name="chemin_cle_privee"></div>
+            <div class="form-row"><label>Mot de passe :</label><input type="password" name="mot_de_passe"></div>
+            <div style="text-align:center;margin-top:18px;">
+                <button type="submit">Ajouter</button>
+            </div>
+        </form>
+        </div>
+        <hr>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Adresse IP</th>
+                    <th>Utilisateur SSH</th>
+                    <th>Port</th>
+                    <th>Clé privée</th>
+                    <th>Mot de passe</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for serveur in serveurs %}
+                <tr>
+                    <td>{{ serveur.id }}</td>
+                    <td>{{ serveur.nom }}</td>
+                    <td>{{ serveur.adresse_ip }}</td>
+                    <td>{{ serveur.utilisateur_ssh }}</td>
+                    <td>{{ serveur.port_ssh }}</td>
+                    <td>{{ serveur.chemin_cle_privee or '' }}</td>
+                    <td>{{ serveur.mot_de_passe or '' }}</td>
+                    <td>
+                        <form method="post" action="/supprimer_serveur_html" style="display:inline;">
+                            <input type="hidden" name="serveur_id" value="{{ serveur.id }}">
+                            <button type="submit" onclick="return confirm('Supprimer ce serveur ?');">Supprimer</button>
+                        </form>
+                        <form method="get" action="/editer_serveur_html" style="display:inline;">
+                            <input type="hidden" name="serveur_id" value="{{ serveur.id }}">
+                            <button type="submit">Éditer</button>
+                        </form>
+                        <form method="post" action="/executer_script_html" class="mini-form-card" style="display:inline-block;vertical-align:middle;">
+                            <input type="hidden" name="serveur_id" value="{{ serveur.id }}">
+                            <input type="text" name="script" placeholder="Commande ou script" required style="min-width:180px;">
+                            <button type="submit">Exécuter</button>
+                        </form>
+                        <a href="/logs_html?serveur_id={{ serveur.id }}">Historique</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if resultat and serveur_id_resultat %}
+            <h2>Résultat de l'exécution (Serveur ID {{ serveur_id_resultat }})</h2>
+            {% if resultat.error %}
+                <div style="color:red;">Erreur : {{ resultat.error }}</div>
+            {% endif %}
+            {% if resultat.stdout %}
+                <div><b>Sortie standard :</b><pre>{{ resultat.stdout }}</pre></div>
+            {% endif %}
+            {% if resultat.stderr %}
+                <div><b>Sortie d'erreur :</b><pre>{{ resultat.stderr }}</pre></div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <script src="/static/theme.js"></script>
+</body>
+</html> 
