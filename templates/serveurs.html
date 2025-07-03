@@ -58,7 +58,10 @@
                     <td>{{ serveur.utilisateur_ssh }}</td>
                     <td>{{ serveur.port_ssh }}</td>
                     <td>{{ serveur.chemin_cle_privee or '' }}</td>
-                    <td>{{ serveur.mot_de_passe or '' }}</td>
+                    <td>
+                        <span class="mdp-cache">••••••••</span>
+                        <button type="button" class="btn-mdp" onclick="ouvrirModaleMdp({{ serveur.id }})">Afficher</button>
+                    </td>
                     <td>
                         <form method="post" action="/supprimer_serveur_html" style="display:inline;">
                             <input type="hidden" name="serveur_id" value="{{ serveur.id }}">
@@ -92,6 +95,25 @@
             {% endif %}
         {% endif %}
     </div>
+    <!-- Modale pour afficher le mot de passe SSH -->
+    <div id="modal-mdp" class="modal-mdp-bg" style="display:none;">
+        <div class="modal-mdp-card">
+            <h3>Afficher le mot de passe SSH</h3>
+            <form id="form-modal-mdp" onsubmit="return false;">
+                <input type="hidden" id="modal-serveur-id">
+                <div class="form-row">
+                    <label>Mot de passe de session :</label>
+                    <input type="password" id="modal-session-mdp" required autofocus>
+                </div>
+                <div id="modal-mdp-result" style="margin:10px 0 0 0;"></div>
+                <div style="text-align:center;margin-top:12px;">
+                    <button type="submit" onclick="verifierAfficherMdp()">Valider</button>
+                    <button type="button" onclick="fermerModaleMdp()" style="margin-left:10px;">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script src="/static/theme.js"></script>
+    <script src="/static/mdp_modal.js"></script>
 </body>
 </html> 

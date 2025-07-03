@@ -28,7 +28,7 @@ python -m venv venv
 # Sous Linux/Mac
 source venv/bin/activate
 
-pip install fastapi uvicorn[standard] sqlalchemy aiosqlite databases paramiko jinja2 aiofiles python-multipart
+pip install fastapi uvicorn[standard] sqlalchemy aiosqlite databases paramiko jinja2 aiofiles python-multipart itsdangerous apscheduler
 ```
 
 ### Lancement de l'API

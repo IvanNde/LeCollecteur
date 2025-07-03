@@ -299,4 +299,28 @@ a:hover {
     margin-left: 6px;
     vertical-align: middle;
     box-shadow: 0 1px 4px rgba(192,57,43,0.13);
+}
+.modal-mdp-bg {
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; right: 0; bottom: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(44,62,80,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-mdp-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 32px rgba(44,62,80,0.18);
+    padding: 32px 28px 22px 28px;
+    min-width: 320px;
+    max-width: 95vw;
+    color: #2c3e50;
+    position: relative;
+}
+body.dark .modal-mdp-card {
+    background: #23272e;
+    color: #ffe082;
 } 

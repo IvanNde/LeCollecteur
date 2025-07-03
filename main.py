@@ -8,7 +8,7 @@ import paramiko
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi import Request
-from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 from starlette.middleware.sessions import SessionMiddleware
 import hashlib
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -414,4 +414,15 @@ def verifier_et_planifier_taches():
     db.close()
 
 scheduler.add_job(verifier_et_planifier_taches, IntervalTrigger(minutes=1))
-scheduler.start() 
+scheduler.start()
+
+@app.post("/afficher_mot_de_passe/{serveur_id}")
+def afficher_mot_de_passe(serveur_id: int, password: str = Form(...), db: Session = Depends(get_db), request: Request = None):
+    import hashlib
+    password_hash = hashlib.sha256(password.encode()).hexdigest()
+    if password_hash != ADMIN_PASSWORD_HASH:
+        return JSONResponse({"success": False, "message": "Mot de passe de session incorrect."}, status_code=401)
+    serveur = db.query(Serveur).filter(Serveur.id == serveur_id).first()
+    if not serveur:
+        return JSONResponse({"success": False, "message": "Serveur introuvable."}, status_code=404)
+    return {"success": True, "mot_de_passe": serveur.mot_de_passe or ""} 
