@@ -17,6 +17,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 import threading
 import time
 from datetime import datetime, timedelta
+import subprocess
 
 app = FastAPI()
 
@@ -425,4 +426,27 @@ def afficher_mot_de_passe(serveur_id: int, password: str = Form(...), db: Sessio
     serveur = db.query(Serveur).filter(Serveur.id == serveur_id).first()
     if not serveur:
         return JSONResponse({"success": False, "message": "Serveur introuvable."}, status_code=404)
-    return {"success": True, "mot_de_passe": serveur.mot_de_passe or ""} 
+    return {"success": True, "mot_de_passe": serveur.mot_de_passe or ""}
+
+@app.get("/ping/{serveur_id}")
+def ping_serveur(serveur_id: int, db: Session = Depends(get_db), user: str = Depends(require_login)):
+    import platform
+    serveur = db.query(Serveur).filter(Serveur.id == serveur_id).first()
+    if not serveur:
+        return JSONResponse({"success": False, "message": "Serveur introuvable.", "latency_ms": None, "ip": None, "error": "not_found"}, status_code=404)
+    ip = serveur.adresse_ip
+    param = '-n' if platform.system().lower() == 'windows' else '-c'
+    try:
+        # On ping une seule fois, timeout 2s
+        result = subprocess.run(["ping", param, "1", ip], capture_output=True, text=True, timeout=3)
+        output = result.stdout + result.stderr
+        if result.returncode == 0:
+            # Extraction du temps de réponse
+            import re
+            match = re.search(r'time[=<]([0-9]+)ms', output)
+            latency = int(match.group(1)) if match else None
+            return {"success": True, "message": f"Réponse en {latency if latency is not None else '?'} ms", "latency_ms": latency, "ip": ip, "error": None}
+        else:
+            return {"success": False, "message": "Timeout ou hôte injoignable", "latency_ms": None, "ip": ip, "error": output.strip()}
+    except Exception as e:
+        return {"success": False, "message": "Erreur lors du ping", "latency_ms": None, "ip": ip, "error": str(e)} 

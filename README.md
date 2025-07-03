@@ -234,4 +234,34 @@ services:
 
 ---
 
+## 10. Fonctionnalité Ping (test de connectivité)
+
+- Un bouton « Ping » est disponible à côté de chaque serveur dans l'interface web.
+- Un clic ouvre une modale qui affiche le résultat du ping (succès/échec, temps de réponse, message).
+- Le ping est effectué depuis le serveur où tourne Le Collecteur (ICMP, 1 paquet, timeout 2s).
+- Le format de réponse de l'API `/ping/{serveur_id}` est :
+
+```json
+{
+  "success": true,
+  "message": "Réponse en 12 ms",
+  "latency_ms": 12,
+  "ip": "192.168.1.10",
+  "error": null
+}
+```
+
+- En cas d'échec :
+```json
+{
+  "success": false,
+  "message": "Timeout ou hôte injoignable",
+  "latency_ms": null,
+  "ip": "192.168.1.10",
+  "error": "Request timed out"
+}
+```
+
+---
+
 *Ce fichier sera mis à jour à chaque évolution du projet.* 

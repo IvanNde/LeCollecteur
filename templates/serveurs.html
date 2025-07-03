@@ -71,6 +71,7 @@
                             <input type="hidden" name="serveur_id" value="{{ serveur.id }}">
                             <button type="submit">Éditer</button>
                         </form>
+                        <button type="button" class="btn-mdp" onclick='ouvrirModalePing({{ serveur.id }}, {{ serveur.nom|tojson }})'>Ping</button>
                         <form method="post" action="/executer_script_html" class="mini-form-card" style="display:inline-block;vertical-align:middle;">
                             <input type="hidden" name="serveur_id" value="{{ serveur.id }}">
                             <input type="text" name="script" placeholder="Commande ou script" required style="min-width:180px;">
@@ -113,7 +114,18 @@
             </form>
         </div>
     </div>
+    <!-- Modale pour le résultat du ping -->
+    <div id="modal-ping" class="modal-mdp-bg" style="display:none;">
+        <div class="modal-mdp-card">
+            <h3>Résultat du ping</h3>
+            <div id="modal-ping-content" style="margin:18px 0 0 0;"></div>
+            <div style="text-align:center;margin-top:18px;">
+                <button type="button" onclick="fermerModalePing()">Fermer</button>
+            </div>
+        </div>
+    </div>
     <script src="/static/theme.js"></script>
     <script src="/static/mdp_modal.js"></script>
+    <script src="/static/ping_modal.js"></script>
 </body>
 </html> 
