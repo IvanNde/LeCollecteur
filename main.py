@@ -429,7 +429,7 @@ def afficher_mot_de_passe(serveur_id: int, password: str = Form(...), db: Sessio
     return {"success": True, "mot_de_passe": serveur.mot_de_passe or ""}
 
 @app.get("/ping/{serveur_id}")
-def ping_serveur(serveur_id: int, db: Session = Depends(get_db), user: str = Depends(require_login)):
+def ping_serveur(serveur_id: int, db: Session = Depends(get_db)):
     import platform
     serveur = db.query(Serveur).filter(Serveur.id == serveur_id).first()
     if not serveur:
